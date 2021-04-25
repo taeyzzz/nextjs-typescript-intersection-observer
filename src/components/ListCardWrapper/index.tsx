@@ -1,15 +1,15 @@
-import { useCallback, useRef, useEffect } from 'react'
+import { useCallback, useRef, useEffect, useState } from 'react'
 import PropTypes, { InferProps } from "prop-types";
 
 import ListCardWrapperStyled from './styled'
 
 function ListCardWrapper ({ id, children, onLoadMore }: InferProps<typeof ListCardWrapper.propTypes>) {
-  const containerRef = useRef(null)
-  const triggerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const triggerRef = useRef<HTMLDivElement | null>(null)
 
-  const observer = useRef(null)
+  const [observer, setObserver] = useState<IntersectionObserver | null>(null)
 
-  const handleIntersect = useCallback((entities) => {
+  const handleIntersect = useCallback((entities: IntersectionObserverEntry[]) => {
     entities.forEach((e: IntersectionObserverEntry) => {
       if(e.target === triggerRef.current && e.isIntersecting && onLoadMore){
         onLoadMore()
@@ -24,15 +24,19 @@ function ListCardWrapper ({ id, children, onLoadMore }: InferProps<typeof ListCa
         rootMargin: "0px",
         threshold: 1
       }
-      observer.current = new IntersectionObserver(handleIntersect, options)
+      setObserver(new IntersectionObserver(handleIntersect, options))
     }
-  }, [containerRef, observer])
+  }, [containerRef, setObserver])
 
   useEffect(() => {
-    if(triggerRef && triggerRef.current && observer.current){
-      observer.current.observe(triggerRef.current)
+    if(triggerRef && triggerRef.current && observer){
+      observer.observe(triggerRef.current)
     }
-    return () => observer.current.unobserve(triggerRef.current)
+    return () => {
+      if(observer && triggerRef.current){
+        observer.unobserve(triggerRef.current)
+      }
+    }
   }, [observer, triggerRef])
 
   return (
