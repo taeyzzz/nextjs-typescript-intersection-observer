@@ -4,14 +4,14 @@ import PropTypes, { InferProps } from "prop-types";
 
 import Button from '../src/components/Button'
 
-import styles from '../styles/Home.module.css'
+import HomeStyled from './styled'
 
 export default function Home({ message }: InferProps<typeof Home.propTypes>) {
   return (
-    <div className={styles.container}>
+    <HomeStyled>
       Hello
       <Button text="Button" onClick={() => alert("clicked")}/>
-    </div>
+    </HomeStyled>
   )
 }
 

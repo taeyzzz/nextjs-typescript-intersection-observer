@@ -1,6 +1,8 @@
 import { SFC, useCallback } from 'react'
 import PropTypes, { InferProps } from "prop-types";
 
+import ButtonStyled from './styled'
+
 function Button({ text, onClick }: InferProps<typeof Button.propTypes>) {
   const handleClicked = useCallback(() => {
     if(onClick){
@@ -9,9 +11,9 @@ function Button({ text, onClick }: InferProps<typeof Button.propTypes>) {
   }, [onClick])
 
   return (
-    <button onClick={handleClicked}>
+    <ButtonStyled onClick={handleClicked}>
       {text}
-    </button>
+    </ButtonStyled>
   )
 }
 
