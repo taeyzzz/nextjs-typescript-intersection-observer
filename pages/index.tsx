@@ -3,6 +3,12 @@ import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import PropTypes, { InferProps } from "prop-types";
 import faker from 'faker'
+import { useSelector, useDispatch } from 'react-redux'
+
+import type { RootState } from '../src/store'
+import { People } from '../src/store/slices/application/types'
+
+import { loadPeople } from '../src/store/thunk-actions/application'
 
 import Button from '../src/components/Button/dynamic'
 import ListCardWrapper from '../src/components/ListCardWrapper'
@@ -22,13 +28,20 @@ const createMockData = () => {
 }
 
 export default function Home({ message }: InferProps<typeof Home.propTypes>) {
-  const [listData, setListData] = useState(createMockData())
+  const dispatch = useDispatch()
+  const listPeople = useSelector((state: RootState) => state.application.listPeople)
+
+  const handleFetchLoadPeople = useCallback(() => {
+    dispatch(loadPeople())
+  }, [dispatch])
+
+  useEffect(() => {
+    handleFetchLoadPeople()
+  }, [])
 
   const handleAddMoreData = useCallback(() => {
-    setListData(prev => {
-      return [...prev, ...createMockData()]
-    })
-  }, [setListData])
+    handleFetchLoadPeople()
+  }, [handleFetchLoadPeople])
 
   return (
     <HomeStyled>
@@ -36,7 +49,7 @@ export default function Home({ message }: InferProps<typeof Home.propTypes>) {
       <Button text="Button" onClick={() => alert("clicked")}/>
       <ListCardWrapper onLoadMore={handleAddMoreData}>
         {
-          listData.map((data) => {
+          listPeople.map((data: People) => {
             return (
               <Card
                 key={data.id}
