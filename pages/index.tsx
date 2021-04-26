@@ -16,17 +16,6 @@ import Card from '../src/components/Card'
 
 import HomeStyled from './styled'
 
-const createMockData = () => {
-  return [...new Array(50)].map(_ => {
-    return {
-      id: faker.datatype.uuid(),
-      name: faker.name.findName(),
-      img: faker.internet.avatar(),
-      description: faker.name.jobDescriptor()
-    }
-  })
-}
-
 export default function Home({ message }: InferProps<typeof Home.propTypes>) {
   const dispatch = useDispatch()
   const listPeople = useSelector((state: RootState) => state.application.listPeople)
@@ -69,7 +58,7 @@ Home.propTypes = {
   message: PropTypes.string
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       message: "hello"

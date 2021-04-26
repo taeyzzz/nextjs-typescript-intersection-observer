@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { FETCH_STATUS_IDLE, FETCH_STATUS_REQUEST, FETCH_STATUS_SUCCESS, FETCH_STATUS_FAILURE } from '../../../utils'
 
-import { ApplicationReducerState } from './types'
-
 const initialState = {
   message: 'hello world',
   listPeople: [],
@@ -17,19 +15,19 @@ const applicationSlice = createSlice({
   initialState,
   reducers: {
     changeMessage: {
-      reducer: (state, action: PayloadAction<ApplicationReducerState>) => {
+      reducer: (state, action) => {
         state.message = action.payload.message
       },
-      prepare: (message: string) => ({
+      prepare: (message) => ({
         payload: { message }
       }),
     },
-    loadPeopleRequest: (state, action: PayloadAction<ApplicationReducerState>) => {
+    loadPeopleRequest: (state, action) => {
       state.loadPeople.fetchStatus = FETCH_STATUS_REQUEST
     },
     loadPeopleSuccess: {
-      reducer: (state, action: PayloadAction<ApplicationReducerState>) => {
-        state.listPeople = action.payload.listPeople
+      reducer: (state, action) => {
+        state.listPeople = [...state.listPeople, ...action.payload.listPeople]
         state.loadPeople.fetchStatus = FETCH_STATUS_SUCCESS
       },
       prepare: listPeople => ({
@@ -39,7 +37,7 @@ const applicationSlice = createSlice({
       }),
     },
     loadPeopleFailure: {
-      reducer: (state, action: PayloadAction<ApplicationReducerState>) => {
+      reducer: (state, action) => {
         state.loadPeople.fetchStatus = FETCH_STATUS_FAILURE
         state.loadPeople.error = action.payload.error
       },
@@ -49,7 +47,7 @@ const applicationSlice = createSlice({
         },
       }),
     },
-    loadPeopleIdle: (state, action: PayloadAction<ApplicationReducerState>) => {
+    loadPeopleIdle: (state, action) => {
       state.loadPeople.fetchStatus = FETCH_STATUS_IDLE
     }
   },
