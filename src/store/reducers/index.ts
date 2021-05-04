@@ -1,15 +1,18 @@
-import { combineReducers } from '@reduxjs/toolkit'
+import { combineReducers, AnyAction } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
-// import { PayloadAction } from '@reduxjs/toolkit'
-// import type { RootState } from '../index'
+import { ApplicationReducerState } from '../slices/application/types'
 
 import application from '../slices/application'
+
+export interface ReducerState {
+  application: ApplicationReducerState
+}
 
 const appCombineReducers = combineReducers({
   application,
 })
 
-const rootReducer = (state, action) => {
+const rootReducer = (state: ReducerState, action: AnyAction) => {
   if (action.type === HYDRATE) {
     return {
       ...state,

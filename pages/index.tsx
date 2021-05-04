@@ -5,7 +5,7 @@ import PropTypes, { InferProps } from "prop-types";
 import faker from 'faker'
 import { useSelector, useDispatch } from 'react-redux'
 
-import type { RootState } from '../src/store'
+import type { ReducerState } from '../src/store/reducers'
 import { People } from '../src/store/slices/application/types'
 
 import { loadPeople } from '../src/store/thunk-actions/application'
@@ -18,7 +18,7 @@ import HomeStyled from './styled'
 
 export default function Home({ message }: InferProps<typeof Home.propTypes>) {
   const dispatch = useDispatch()
-  const listPeople = useSelector((state: RootState) => state.application.listPeople)
+  const listPeople = useSelector((state: ReducerState) => state.application.listPeople)
 
   const handleFetchLoadPeople = useCallback(() => {
     dispatch(loadPeople())
